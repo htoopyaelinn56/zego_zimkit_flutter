@@ -1,4 +1,8 @@
 
+## 1.18.15
+
+- Add namespace on build.grade
+
 ## 1.18.14
 
 - Update dependency
