@@ -205,21 +205,24 @@ extension ZIMKitCoreMessageMedia on ZIMKitCore {
       ZIMKitLogger.info('downloadMediaFile: ${zimMediaMessage.fileName} - '
           '${downloadType.name} start');
       ZIM.getInstance()!.downloadMediaFile(
-          kitMessageNotifier.value.zim as ZIMMediaMessage, downloadType,
-          (ZIMMessage zimMessage, int currentFileSize, int totalFileSize) {
-        ZIMKitLogger.info('downloadMediaFile: ${zimMediaMessage.fileName} - '
-            '${downloadType.name} $currentFileSize/$totalFileSize');
+        kitMessageNotifier.value.zim as ZIMMediaMessage,
+        downloadType,
+        ZIMMediaDownloadConfig(),
+        (ZIMMessage zimMessage, int currentFileSize, int totalFileSize) {
+          ZIMKitLogger.info('downloadMediaFile: ${zimMediaMessage.fileName} - '
+              '${downloadType.name} $currentFileSize/$totalFileSize');
 
-        kitMessageNotifier.value = (kitMessageNotifier.value.clone()
-          ..updateExtraInfo({
-            'download': {
-              downloadType.name: {
-                'currentFileSize': currentFileSize,
-                'totalFileSize': totalFileSize,
+          kitMessageNotifier.value = (kitMessageNotifier.value.clone()
+            ..updateExtraInfo({
+              'download': {
+                downloadType.name: {
+                  'currentFileSize': currentFileSize,
+                  'totalFileSize': totalFileSize,
+                }
               }
-            }
-          }));
-      }).then((ZIMMediaDownloadedResult result) {
+            }));
+        },
+      ).then((ZIMMediaDownloadedResult result) {
         ZIMKitLogger.info('downloadMediaFile: ${zimMediaMessage.fileName} - '
             '${downloadType.name} success');
         kitMessageNotifier.value = (kitMessageNotifier.value.clone()

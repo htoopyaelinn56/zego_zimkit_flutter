@@ -78,7 +78,7 @@ class ZIMKitCore
   final onGroupMemberInfoUpdatedEventController =
       StreamController<ZIMKitEventGroupMemberInfoUpdated>.broadcast();
 
-  String get version => '1.18.14';
+  String get version => '1.18.16';
 
   // API
   Future<String> getVersion() async {
