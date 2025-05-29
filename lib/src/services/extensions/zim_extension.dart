@@ -248,9 +248,9 @@ extension ZIMUserFullInfoExtend on ZIMUserFullInfo {
 }
 
 extension ZIMString on String {
-  ZIMConversationType? toConversationType() {
+  ZIMKitConversationType? toConversationType() {
     try {
-      return ZIMConversationType.values
+      return ZIMKitConversationType.values
           .where((element) => element.name == this)
           .first;
     } catch (e) {
@@ -299,23 +299,23 @@ extension ZIMKitConversationExtend on ZIMKitConversation {
       ..lastMessage = lastMessage?.zim;
   }
 
-  bool equal(String id, ZIMConversationType type) =>
+  bool equal(String id, ZIMKitConversationType type) =>
       (this.id == id) && (this.type == type);
 
   Widget get icon {
     late Widget placeholder;
     switch (type) {
-      case ZIMConversationType.peer:
+      case ZIMKitConversationType.peer:
         return ZIMKitAvatar(userID: id, name: name);
-      case ZIMConversationType.room:
+      case ZIMKitConversationType.room:
         placeholder =
             CircleAvatar(child: Text(name.isNotEmpty ? name[0] : id[0]));
         break;
-      case ZIMConversationType.group:
+      case ZIMKitConversationType.group:
         placeholder =
             CircleAvatar(child: Text(name.isNotEmpty ? name[0] : id[0]));
         break;
-      case ZIMConversationType.unknown:
+      case ZIMKitConversationType.unknown:
         break;
     }
 
@@ -386,7 +386,7 @@ extension ZIMGroupExtension on ZIMGroup {
       ..id = baseInfo?.groupID ?? ''
       ..name = baseInfo?.groupName ?? ''
       ..avatarUrl = baseInfo?.groupAvatarUrl ?? ''
-      ..type = ZIMConversationType.group
+      ..type = ZIMKitConversationType.group
       ..notificationStatus =
           (notificationStatus == ZIMGroupMessageNotificationStatus.notify
               ? ZIMConversationNotificationStatus.notify
@@ -406,7 +406,7 @@ extension ZIMGroupInfoExtension on ZIMGroupInfo {
       ..id = groupID
       ..name = groupName
       ..avatarUrl = groupAvatarUrl
-      ..type = ZIMConversationType.group;
+      ..type = ZIMKitConversationType.group;
   }
 
   String get id => groupID;

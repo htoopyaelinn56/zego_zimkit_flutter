@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:file_picker/file_picker.dart';
-
 import 'package:zego_zimkit/src/services/services.dart';
 
 class ZIMKitPickMediaButton extends StatelessWidget {
@@ -11,14 +9,14 @@ class ZIMKitPickMediaButton extends StatelessWidget {
     this.icon,
   }) : super(key: key);
 
-  final Function(List<PlatformFile> files) onFilePicked;
+  final Function(List<ZIMKitPlatformFile> files) onFilePicked;
   final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        ZIMKit().pickFiles(type: FileType.media).then(onFilePicked);
+        ZIMKit().pickFiles(type: ZIMKitFileType.media).then(onFilePicked);
       },
       child: icon ??
           Icon(
