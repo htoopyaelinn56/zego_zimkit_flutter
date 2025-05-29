@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:zego_zim/zego_zim.dart';
 
 import 'package:zego_zimkit/src/components/components.dart';
@@ -194,7 +193,7 @@ class ZIMKitMessageListPage extends StatefulWidget {
   final Widget Function(BuildContext context, Widget defaultWidget)?
       messageListBackgroundBuilder;
 
-  final void Function(BuildContext context, List<PlatformFile> files,
+  final void Function(BuildContext context, List<ZIMKitPlatformFile> files,
       Function defaultAction)? onMediaFilesPicked;
 
   // theme

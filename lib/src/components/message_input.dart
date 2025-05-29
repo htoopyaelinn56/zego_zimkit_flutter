@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:zego_zim/zego_zim.dart';
 
 import 'package:zego_zimkit/src/components/components.dart';
@@ -109,7 +109,7 @@ class ZIMKitMessageInput extends StatefulWidget {
   /// Called before a message is sent.
   final FutureOr<ZIMKitMessage> Function(ZIMKitMessage)? preMessageSending;
 
-  final void Function(BuildContext context, List<PlatformFile> files,
+  final void Function(BuildContext context, List<ZIMKitPlatformFile> files,
       Function defaultAction)? onMediaFilesPicked;
 
   /// The TextField's decoration.
@@ -337,7 +337,7 @@ class _ZIMKitMessageInputState extends State<ZIMKitMessageInput> {
       child: ZIMKitPickFileButton(
         icon: widget.pickFileButtonWidget,
         onFilePicked: (
-          List<PlatformFile> files,
+          List<ZIMKitPlatformFile> files,
         ) {
           void defaultAction() {
             ZIMKit().sendFileMessage(
@@ -370,7 +370,7 @@ class _ZIMKitMessageInputState extends State<ZIMKitMessageInput> {
       child: ZIMKitPickMediaButton(
         icon: widget.pickMediaButtonWidget,
         onFilePicked: (
-          List<PlatformFile> files,
+          List<ZIMKitPlatformFile> files,
         ) {
           void defaultAction() {
             ZIMKit().sendMediaMessage(
@@ -490,7 +490,7 @@ class _ZIMKitMessageInputState extends State<ZIMKitMessageInput> {
 
   void jumpListToBottom() {
     if (widget.listScrollController?.hasClients ?? false) {
-      Future.delayed(Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         widget.listScrollController?.jumpTo(
           (widget.listScrollController?.position.maxScrollExtent ?? 0),
         );

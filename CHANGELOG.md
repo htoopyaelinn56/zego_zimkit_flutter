@@ -1,4 +1,12 @@
+## 1.19.0
 
+- Features
+  - Support sending webp image format
+  - Support to get the offline message content which active app through the **getOfflineConversationInfo** API
+
+
+- Bugs
+  - Fix the issue that android compile error about namespace not specified
 
 ## 1.18.17
 

@@ -1,42 +1,53 @@
 part of 'zimkit_services.dart';
 
 mixin ZIMKitInputService {
-  Future<List<PlatformFile>> pickFiles(
-      {FileType type = FileType.any, bool allowMultiple = true}) async {
+  Future<List<ZIMKitPlatformFile>> pickFiles(
+      {ZIMKitFileType type = ZIMKitFileType.any,
+      bool allowMultiple = true}) async {
     try {
       await requestPermission();
-      ZIMKitLogger.info(
+      ZIMKitLogger.logInfo(
           'pickFiles: start, ${DateTime.now().millisecondsSinceEpoch}');
       // see https://github.com/miguelpruivo/flutter_file_picker/wiki/API#-filepickerpickfiles
       final ret = (await FilePicker.platform.pickFiles(
-            type: type,
+            type: FileType.values[type.index],
             allowMultiple: allowMultiple,
             onFileLoading: (p0) {
-              ZIMKitLogger.info('onFileLoading: '
+              ZIMKitLogger.logInfo('onFileLoading: '
                   '$p0,${DateTime.now().millisecondsSinceEpoch}');
             },
           ))
               ?.files ??
           [];
-      ZIMKitLogger.info(
+      ZIMKitLogger.logInfo(
           'pickFiles: $ret, ${DateTime.now().millisecondsSinceEpoch}');
-      return ret;
+      return ret
+          .map((file) => ZIMKitPlatformFile(
+                name: file.name,
+                path: file.path,
+                bytes: file.bytes,
+                readStream: file.readStream,
+                size: file.size,
+                identifier: file.identifier,
+              ))
+          .toList();
     } on PlatformException catch (e) {
-      ZIMKitLogger.severe('Unsupported operation $e');
+      ZIMKitLogger.logError('Unsupported operation $e');
     } catch (e) {
-      ZIMKitLogger.severe(e.toString());
+      ZIMKitLogger.logError(e.toString());
     }
     return [];
   }
 
-  ZIMMessageType getMessageTypeByFileExtension(PlatformFile file) {
+  ZIMMessageType getMessageTypeByFileExtension(ZIMKitPlatformFile file) {
     const supportImageList = <String>[
       'jpg',
       'jpeg',
       'png',
       'bmp',
       'gif',
-      'tiff'
+      'tiff',
+      'webp',
     ]; // <10M
     const supportVideoList = <String>['mp4', 'mov']; // <100M
     const supportAudioList = <String>['mp3', 'm4a']; // <300s, <6M
@@ -64,9 +75,9 @@ mixin ZIMKitInputService {
     }
     final status = await Permission.storage.request();
     if (status != PermissionStatus.granted) {
-      ZIMKitLogger.severe('Warn: Permission.storage not granted, $status');
+      ZIMKitLogger.logError('Warn: Permission.storage not granted, $status');
       if (Platform.isAndroid) {
-        ZIMKitLogger.severe(
+        ZIMKitLogger.logError(
             'Warn: On Android TIRAMISU and higher this permission is deprecrated and always returns `PermissionStatus.denied`');
       }
     }
@@ -74,20 +85,20 @@ mixin ZIMKitInputService {
     if (Platform.isAndroid) {
       final status = await Permission.photos.request();
       if (status != PermissionStatus.granted) {
-        ZIMKitLogger.severe('Error: Permission.storage not granted, $status');
+        ZIMKitLogger.logError('Error: Permission.storage not granted, $status');
       }
     }
 
     if (Platform.isAndroid) {
       final status = await Permission.audio.request();
       if (status != PermissionStatus.granted) {
-        ZIMKitLogger.severe('Error: Permission.storage not granted, $status');
+        ZIMKitLogger.logError('Error: Permission.storage not granted, $status');
       }
     }
     if (Platform.isAndroid) {
       final status = await Permission.videos.request();
       if (status != PermissionStatus.granted) {
-        ZIMKitLogger.severe('Error: Permission.storage not granted, $status');
+        ZIMKitLogger.logError('Error: Permission.storage not granted, $status');
       }
     }
   }

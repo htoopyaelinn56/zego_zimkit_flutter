@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import 'package:zego_zimkit/src/services/extensions/extensions.dart';
@@ -11,8 +12,13 @@ typedef ZIMKitConversationNotifier = ValueNotifier<ZIMKitConversation>;
 typedef ZIMKitConversationListNotifier
     = ListNotifier<ZIMKitConversationNotifier>;
 
+typedef ZIMKitConversationType = ZIMConversationType;
+typedef ZIMKitMessageType = ZIMMessageType;
+typedef ZIMKitGroupMemberInfo = ZIMGroupMemberInfo;
+typedef ZIMKitUserFullInfo = ZIMUserFullInfo;
+
 class ZIMKitConversation {
-  ZIMConversationType type = ZIMConversationType.peer;
+  ZIMKitConversationType type = ZIMKitConversationType.peer;
 
   // conversation
   String id = '';
@@ -32,8 +38,6 @@ class ZIMKitGroupInfo {
   ZIMGroupState state = ZIMGroupState.enter;
   ZIMGroupEvent event = ZIMGroupEvent.created;
 }
-
-typedef ZIMKitMessageType = ZIMMessageType;
 
 class ZIMKitMessage {
   ZIMKitMessageType type = ZIMKitMessageType.unknown;
@@ -115,7 +119,7 @@ class ZIMKitMessageBaseInfo {
   String conversationID = '';
   ZIMMessageDirection direction = ZIMMessageDirection.send;
   ZIMMessageSentStatus sentStatus = ZIMMessageSentStatus.sending;
-  ZIMConversationType conversationType = ZIMConversationType.peer;
+  ZIMKitConversationType conversationType = ZIMKitConversationType.peer;
   int timestamp = 0;
   int conversationSeq = 0;
   int orderKey = 0;
@@ -320,3 +324,6 @@ class MediaTransferProgress {
 class ZIMKitInvitationProtocolKey {
   static String operationType = 'operation_type';
 }
+/// file picker typedefs
+typedef ZIMKitFileType = FileType;
+typedef ZIMKitPlatformFile = PlatformFile;

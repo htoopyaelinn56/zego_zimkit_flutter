@@ -1,5 +1,7 @@
 import 'package:zego_plugin_adapter/zego_plugin_adapter.dart';
 
+import 'package:zego_zimkit/src/services/defines.dart';
+
 class ZegoZIMKitNotificationConfig {
   /// The [resource id] for notification which same as [Zego Console](https://console.zegocloud.com/)
   String? resourceID;
@@ -75,5 +77,29 @@ class ZegoZIMKitIOSNotificationConfig {
   String toString() {
     return 'isSandboxEnvironment:$isSandboxEnvironment, '
         'certificateIndex:$certificateIndex ';
+  }
+}
+
+class ZegoZIMKitOfflineMessageCacheInfo {
+  const ZegoZIMKitOfflineMessageCacheInfo({
+    required this.conversationID,
+    required this.conversationTypeIndex,
+    required this.senderID,
+  });
+
+  final String conversationID;
+  final int conversationTypeIndex;
+  final String senderID;
+
+  bool get valid => conversationID.isNotEmpty && senderID.isNotEmpty;
+
+  ZIMKitConversationType get conversionType =>
+      ZIMKitConversationType.values[conversationTypeIndex];
+
+  @override
+  String toString() {
+    return 'id:$conversationID, '
+        'type index:$conversationTypeIndex, '
+        'sender id:$senderID';
   }
 }

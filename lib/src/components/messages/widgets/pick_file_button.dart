@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:file_picker/file_picker.dart';
-
 import 'package:zego_zimkit/src/services/services.dart';
 
 class ZIMKitPickFileButton extends StatelessWidget {
   const ZIMKitPickFileButton({
     Key? key,
     required this.onFilePicked,
-    this.type = FileType.any,
+    this.type = ZIMKitFileType.any,
     this.icon,
   }) : super(key: key);
 
-  final Function(List<PlatformFile> files) onFilePicked;
+  final Function(List<ZIMKitPlatformFile> files) onFilePicked;
   final Widget? icon;
-  final FileType type;
+  final ZIMKitFileType type;
 
   @override
   Widget build(BuildContext context) {

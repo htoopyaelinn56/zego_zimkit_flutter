@@ -37,7 +37,7 @@ mixin ZIMKitMessageService {
   Future<void> sendFileMessage(
     String conversationID,
     ZIMConversationType type,
-    List<PlatformFile> files, {
+    List<ZIMKitPlatformFile> files, {
     bool autoDetectType = true,
     ZIMMediaUploadingProgress? mediaUploadingProgress,
     FutureOr<ZIMKitMessage> Function(ZIMKitMessage)? preMessageSending,
@@ -58,12 +58,12 @@ mixin ZIMKitMessageService {
   Future<void> sendMediaMessage(
     String conversationID,
     ZIMConversationType type,
-    List<PlatformFile> files, {
+    List<ZIMKitPlatformFile> files, {
     ZIMMediaUploadingProgress? mediaUploadingProgress,
     FutureOr<ZIMKitMessage> Function(ZIMKitMessage)? preMessageSending,
     Function(ZIMKitMessage)? onMessageSent,
   }) async {
-    ZIMKitLogger.info(
+    ZIMKitLogger.logInfo(
         'sendMediaMessage: ${DateTime.now().millisecondsSinceEpoch}');
     for (final file in files) {
       await ZIMKitCore.instance.sendMediaMessage(

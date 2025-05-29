@@ -67,7 +67,7 @@ class ZIMKit
     return ZIMKitCore.instance.uninit();
   }
 
-  String getVersion() {
+  String getVersion()  {
     return ZIMKitCore.instance.version;
   }
 }

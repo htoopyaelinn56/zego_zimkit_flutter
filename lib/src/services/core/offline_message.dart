@@ -14,7 +14,7 @@ mixin ZIMKitOfflineMessage {
   Future<void> initOfflineMessage({
     ZegoZIMKitNotificationConfig? notificationConfig,
   }) async {
-    ZIMKitLogger.info(
+    ZIMKitLogger.logInfo(
       'init offline message, config:$notificationConfig',
     );
 
@@ -44,18 +44,19 @@ mixin ZIMKitOfflineMessage {
         )
         .then(
       (result) {
-        ZIMKitLogger.info('enable notification result: $result');
+        ZIMKitLogger.logInfo('enable notification result: $result');
       },
     );
 
     if (Platform.isAndroid) {
-      ZIMKitLogger.info(
+      ZIMKitLogger.logInfo(
         'offline message, register background message handler',
       );
 
-      await ZegoPluginAdapter()
-          .signalingPlugin
-          ?.setBackgroundMessageHandler(onBackgroundMessageReceived);
+      await ZegoPluginAdapter().signalingPlugin?.setBackgroundMessageHandler(
+            onBackgroundMessageReceived,
+            key: 'zego_zimkit',
+          );
     } else if (Platform.isIOS) {
       ///
     }
@@ -69,7 +70,7 @@ mixin ZIMKitOfflineMessage {
     ZegoZIMKitNotificationConfig? notificationConfig,
   }) async {
     if (!(notificationConfig?.supportOfflineMessage ?? false)) {
-      ZIMKitLogger.info(
+      ZIMKitLogger.logInfo(
         'background message, but not support background message',
       );
 

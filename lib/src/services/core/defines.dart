@@ -12,15 +12,15 @@ class ZIMKitDB {
   ZIMKitConversationList conversations = ZIMKitConversationList();
 
   /// New Message Notification
-  final Map<ZIMConversationType, Map<String, ZIMKitMessageList>> _messageList =
-      {};
+  final Map<ZIMKitConversationType, Map<String, ZIMKitMessageList>>
+      _messageList = {};
   final Map<String, ZIMKitGroupMemberList> _groupMemberList = {};
   final Map<String, ZIMKitGroupInfoData> _groupInfo = {};
 
-  ZIMKitMessageList messages(String id, ZIMConversationType type) {
+  ZIMKitMessageList messages(String fromUserID, ZIMKitConversationType type) {
     _messageList[type] ??= {};
-    _messageList[type]![id] ??= ZIMKitMessageList();
-    return _messageList[type]![id]!;
+    _messageList[type]![fromUserID] ??= ZIMKitMessageList();
+    return _messageList[type]![fromUserID]!;
   }
 
   ZIMKitGroupMemberList groupMemberList(String id) {
@@ -107,7 +107,8 @@ class ZIMKitConversationList {
     hasMore = true;
   }
 
-  ValueNotifier<ZIMKitConversation> get(String id, ZIMConversationType type) {
+  ValueNotifier<ZIMKitConversation> get(
+      String id, ZIMKitConversationType type) {
     ValueNotifier<ZIMKitConversation>? ret;
     for (var i = 0; i < notifier.length; i++) {
       if (notifier[i].value.equal(id, type)) {
@@ -123,14 +124,14 @@ class ZIMKitConversationList {
       // so here do not notify ui, will notify later
       notifier.insert(0, ValueNotifier(zimConversation.toKIT()), notify: false);
       ret = get(id, type);
-      if (type == ZIMConversationType.peer) {
+      if (type == ZIMKitConversationType.peer) {
         ZIMKit().queryUser(id).then((ZIMUserFullInfo zimResult) {
           final newConversation = ret!.value.clone()
             ..name = zimResult.baseInfo.userName
             ..avatarUrl = zimResult.userAvatarUrl;
           ret.value = newConversation;
         });
-      } else if (type == ZIMConversationType.group) {
+      } else if (type == ZIMKitConversationType.group) {
         ZIM
             .getInstance()!
             .queryGroupInfo(id)
@@ -160,7 +161,7 @@ class ZIMKitConversationList {
     notifier.clear();
   }
 
-  void delete(String id, ZIMConversationType type) {
+  void delete(String id, ZIMKitConversationType type) {
     notifier.removeWhere((element) {
       if (element.value.equal(id, type)) {
         return true;
@@ -193,7 +194,7 @@ class ZIMKitConversationList {
     sort();
   }
 
-  void remove(String id, ZIMConversationType type) {
+  void remove(String id, ZIMKitConversationType type) {
     notifier.removeWhere((element) => element.value.equal(id, type));
   }
 
@@ -288,7 +289,7 @@ class ZIMKitMessageList {
     final index = notifier.value
         .indexWhere((e) => (e.value.info.messageID == reaction.messageID));
     if (index == -1) {
-      ZIMKitLogger.warning("[db]onMessageReactionsChanged: can't find message");
+      ZIMKitLogger.logWarn("[db]onMessageReactionsChanged: can't find message");
     } else {
       notifier[index].value.onMessageReactionsChanged(reaction);
     }
@@ -446,7 +447,7 @@ class ZIMKitGroupMemberList {
 
 class ZIMKitReceivedMessages {
   String id;
-  ZIMConversationType type;
+  ZIMKitConversationType type;
   List<ZIMKitMessage> receiveMessages;
 
   ZIMKitReceivedMessages({
