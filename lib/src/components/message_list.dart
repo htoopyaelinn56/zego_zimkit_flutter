@@ -20,6 +20,7 @@ class ZIMKitMessageListView extends StatefulWidget {
     this.itemBuilder,
     this.messageContentBuilder,
     this.avatarBuilder,
+    this.statusBuilder,
     this.backgroundBuilder,
     this.loadingBuilder,
     this.onLongPress,
@@ -58,6 +59,10 @@ class ZIMKitMessageListView extends StatefulWidget {
       ZIMKitMessage message,
       Widget defaultWidget
       )? avatarBuilder;
+  final Widget Function(
+      BuildContext context,
+      ZIMKitMessage message,
+      Widget defaultWidget)? statusBuilder;
   final Widget Function(
     BuildContext context,
     Widget defaultWidget,
@@ -350,6 +355,7 @@ class _ZIMKitMessageListViewState extends State<ZIMKitMessageListView> {
           onLongPress: widget.onLongPress,
           messageContentBuilder: widget.messageContentBuilder,
           avatarBuilder: widget.avatarBuilder,
+          statusBuilder: widget.statusBuilder,
         ),
       ),
     );
