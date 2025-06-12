@@ -120,7 +120,7 @@ extension ZIMKitCoreMessage on ZIMKitCore {
 
     // 1. create message
     var kitMessage = ZIMTextMessage(message: text).toKIT();
-    final sendConfig = ZIMMessageSendConfig();
+    final sendConfig = ZIMMessageSendConfig()..hasReceipt = true;
 
     if (ZegoZIMKitNotificationManager.instance.resourceID?.isNotEmpty ??
         false) {
@@ -210,7 +210,7 @@ extension ZIMKitCoreMessage on ZIMKitCore {
         (ZIMCustomMessage(subType: customType, message: customMessage)
               ..searchedContent = searchedContent ?? '')
             .toKIT();
-    final sendConfig = ZIMMessageSendConfig();
+    final sendConfig = ZIMMessageSendConfig()..hasReceipt = true;
 
     // 2. preMessageSending
     kitMessage = (await preMessageSending?.call(kitMessage)) ?? kitMessage;
