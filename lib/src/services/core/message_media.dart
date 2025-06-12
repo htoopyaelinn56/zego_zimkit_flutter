@@ -36,7 +36,7 @@ extension ZIMKitCoreMessageMedia on ZIMKitCore {
     // ignore: cascade_invocations
     kitMessage.reGenerateZIMMessage();
 
-    final sendConfig = ZIMMessageSendConfig();
+    final sendConfig = ZIMMessageSendConfig()..hasReceipt = true;;
     if (ZegoZIMKitNotificationManager.instance.resourceID?.isNotEmpty ??
         false) {
       final pushConfig = ZIMPushConfig()
