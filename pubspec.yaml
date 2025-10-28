@@ -19,7 +19,7 @@ dependencies:
   zego_zim:
   zego_zim_audio:
   zego_zpns:
-  zego_callkit:
+
 
   cupertino_icons: ^1.0.6
   equatable: ^2.0.5
