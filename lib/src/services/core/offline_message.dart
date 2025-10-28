@@ -9,6 +9,7 @@ import 'package:zego_zimkit/src/callkit/variables.dart';
 import 'package:zego_zimkit/src/services/logger_service.dart';
 import 'package:zego_zimkit/src/utils/share_pref.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
+import 'package:zego_zpns/zego_zpns.dart';
 
 mixin ZIMKitOfflineMessage {
   Future<void> initOfflineMessage({
@@ -54,10 +55,31 @@ mixin ZIMKitOfflineMessage {
       );
 
       // ** iorUp do not use call kit so it is safe to comment out **
-      // await ZegoPluginAdapter().signalingPlugin?.setBackgroundMessageHandler(
-      //       onBackgroundMessageReceived,
-      //       key: 'zego_zimkit',
-      //     );
+      await ZegoPluginAdapter().signalingPlugin?.setBackgroundMessageHandler(
+        (message) async {
+          onBackgroundMessageReceived(ZPNsMessage(pushSourceType: () {
+            switch (message.pushSourceType) {
+              case ZegoSignalingPluginPushSourceType.apns:
+                return ZPNsPushSourceType.APNs;
+              case ZegoSignalingPluginPushSourceType.zego:
+                return ZPNsPushSourceType.ZEGO;
+              case ZegoSignalingPluginPushSourceType.fcm:
+                return ZPNsPushSourceType.FCM;
+              case ZegoSignalingPluginPushSourceType.huaWei:
+                return ZPNsPushSourceType.HuaWei;
+              case ZegoSignalingPluginPushSourceType.xiaoMi:
+                return ZPNsPushSourceType.XiaoMi;
+              case ZegoSignalingPluginPushSourceType.oppo:
+                return ZPNsPushSourceType.Oppo;
+              case ZegoSignalingPluginPushSourceType.vivo:
+                return ZPNsPushSourceType.Vivo;
+            }
+          }())
+            ..title = message.title
+            ..content = message.content);
+        },
+        key: 'zego_zimkit',
+      );
     } else if (Platform.isIOS) {
       ///
     }
