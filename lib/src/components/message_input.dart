@@ -40,6 +40,7 @@ class ZIMKitMessageInput extends StatefulWidget {
     this.textInputAction,
     this.textCapitalization,
     this.listScrollController,
+    this.recordIcon,
   }) : super(key: key);
 
   /// The conversationID of the conversation to send message.
@@ -171,6 +172,9 @@ class ZIMKitMessageInput extends StatefulWidget {
 
   final ZIMKitRecordStatus recordStatus;
 
+  /// The icon to use for the record button.
+  final Widget? recordIcon;
+
   @override
   State<ZIMKitMessageInput> createState() => _ZIMKitMessageInputState();
 }
@@ -183,11 +187,18 @@ class _ZIMKitMessageInputState extends State<ZIMKitMessageInput> {
   TextEditingController get _editingController =>
       widget.editingController ?? _defaultEditingController;
 
+  bool hasFocus = false;
+
   @override
   void initState() {
     super.initState();
 
-    widget.inputFocusNode?.addListener(onInputFocusChanged);
+    widget.inputFocusNode?.addListener(() {
+      onInputFocusChanged();
+      setState(() {
+        hasFocus = widget.inputFocusNode?.hasFocus == true;
+      });
+    });
   }
 
   @override
@@ -248,11 +259,31 @@ class _ZIMKitMessageInputState extends State<ZIMKitMessageInput> {
     return Expanded(
       child: Row(
         children: [
-          ...buildActions(ZIMKitMessageInputActionLocation.left),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.ease,
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              width: hasFocus ? 0 : null,
+              child: Row(
+                children: buildActions(ZIMKitMessageInputActionLocation.left),
+              ),
+            ),
+          ),
           moreButton(),
           const SizedBox(width: 5),
           contentWidgets(),
-          ...buildActions(ZIMKitMessageInputActionLocation.right)
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.ease,
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              width: hasFocus ? null : 0,
+              child: Row(
+                children: buildActions(ZIMKitMessageInputActionLocation.right),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -294,7 +325,8 @@ class _ZIMKitMessageInputState extends State<ZIMKitMessageInput> {
                     const InputDecoration(hintText: 'type message...'),
               ),
             ),
-            messageButtons(),
+            // send button will be custom and visible based on focus
+            // messageButtons(),
           ],
         ),
       ),
@@ -430,6 +462,7 @@ class _ZIMKitMessageInputState extends State<ZIMKitMessageInput> {
         onMessageSent: onMessageSent,
         preMessageSending: onMessagePreSend,
         events: widget.events,
+        icon: widget.recordIcon,
       ),
     );
   }
